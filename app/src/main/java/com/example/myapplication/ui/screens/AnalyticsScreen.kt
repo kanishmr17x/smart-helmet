@@ -17,6 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.NeonCyan
 import com.example.myapplication.ui.theme.NeonGreen
 import com.example.myapplication.ui.theme.NeonPurple
@@ -89,7 +92,7 @@ fun AnalyticsScreen(
                 )
             }
             
-            item { Spacer(modifier = height(80.dp)) }
+            item { Spacer(modifier = Modifier.height(80.dp)) }
         }
     }
 }
@@ -131,7 +134,8 @@ fun SafetyScoreCard(score: Int) {
             
             CircularProgressIndicator(
                 progress = { score / 100f },
-                modifier = size(110.dp)
+                modifier = Modifier
+                    .size(110.dp)
                     .align(Alignment.CenterEnd),
                 strokeWidth = 12.dp,
                 color = NeonGreen,
@@ -149,14 +153,14 @@ fun WeeklyDurationChart() {
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
         border = CardDefaults.outlinedCardBorder()
     ) {
-        Column(modifier = padding(20.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = "WEEKLY RIDE DURATION",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = NeonCyan
             )
-            Spacer(modifier = height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             
             Row(
                 modifier = Modifier
@@ -181,7 +185,7 @@ fun WeeklyDurationChart() {
                                     )
                                 )
                         )
-                        Spacer(modifier = height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(text = days[index], style = MaterialTheme.typography.labelSmall, color = Color.Gray)
                     }
                 }
@@ -204,7 +208,7 @@ fun StatCard(
         color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
         border = CardDefaults.outlinedCardBorder()
     ) {
-        Column(modifier = padding(16.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
