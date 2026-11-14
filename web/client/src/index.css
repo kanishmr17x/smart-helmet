@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #0B0F14;
+  color: #F1F5F9;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F14;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A3745;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #35D6E7;
+}
+
+/* Technical grid background */
+.tech-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(42, 55, 69, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 55, 69, 0.25) 1px, transparent 1px);
+}
+
+/* Radar scan background */
+.radar-grid {
+  background: radial-gradient(circle, rgba(53, 214, 231, 0.08) 0%, transparent 70%);
+}
+
+/* Tabular numerals for sensor readings */
+.sensor-val {
+  font-variant-numeric: tabular-nums;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Precision chamfer card */
+.helmet-card {
+  background: #161F29;
+  border: 1px solid #2A3745;
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.helmet-card:hover {
+  border-color: #35D6E7;
+  box-shadow: 0 4px 20px -4px rgba(53, 214, 231, 0.15);
+}
+
+/* Leaflet dark theme fix */
+.leaflet-container {
+  background: #0B0F14 !important;
+  font-family: inherit;
+}
+.leaflet-tile {
+  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35) brightness(0.75);
+}

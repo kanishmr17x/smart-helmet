@@ -1,0 +1,16 @@
+{
+  "name": "smart-helmet-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Smart Helmet Central Command monorepo",
+  "scripts": {
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "build:client": "npm --prefix client run build",
+    "lint": "npm --prefix client run lint && npm --prefix server run lint",
+    "test": "npm --prefix server run test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
