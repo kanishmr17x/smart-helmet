@@ -29,78 +29,94 @@ export default function DeviceManager() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div className="border-b border-canvas-border pb-4">
-        <span className="font-mono text-xs font-bold text-cyan uppercase tracking-widest">
-          FLEET HARDWARE INVENTORY
-        </span>
-        <h1 className="text-2xl font-black text-titanium-100 tracking-tight mt-0.5">
+      <div className="border-b border-canvas-border pb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-semibold text-cyan tracking-wide">
+            Fleet Hardware
+          </span>
+          <span className="text-titanium-400 text-xs">•</span>
+          <span className="text-xs text-titanium-400">Inventory & Health</span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-white">
           Connected Smart Helmet Fleet
         </h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {deviceList.map((dev) => (
-          <div
-            key={dev.deviceId}
-            className={`helmet-card p-6 space-y-4 border ${
-              dev.deviceId === activeDeviceId ? 'border-cyan shadow-cyan-sm' : 'border-canvas-border'
-            }`}
-          >
-            <div className="flex items-center justify-between border-b border-canvas-border pb-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan/15 text-cyan border border-cyan/40">
-                  <HardHat className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="font-mono font-bold text-base text-titanium-100">
-                    {dev.deviceId}
-                  </h3>
-                  <span className="text-xs text-titanium-400">{dev.riderName}</span>
-                </div>
-              </div>
-
-              <span
-                className={`px-2.5 py-1 rounded-full text-xs font-mono font-bold ${
-                  dev.online ? 'bg-status-success/20 text-status-success' : 'bg-status-danger/20 text-status-danger'
-                }`}
-              >
-                {dev.online ? 'CONNECTED' : 'DISCONNECTED'}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded-lg bg-canvas-subtle border border-canvas-border flex items-center justify-between">
-                <span className="text-titanium-400">BATTERY:</span>
-                <span className="text-cyan font-bold">{dev.batteryLevel}%</span>
-              </div>
-              <div className="p-3 rounded-lg bg-canvas-subtle border border-canvas-border flex items-center justify-between">
-                <span className="text-titanium-400">GPS FIX:</span>
-                <span className="text-status-success font-bold">{dev.gpsFix ? 'LOCKED' : 'NO LOCK'}</span>
-              </div>
-              <div className="p-3 rounded-lg bg-canvas-subtle border border-canvas-border flex items-center justify-between">
-                <span className="text-titanium-400">WORN:</span>
-                <span className={dev.helmetWorn ? 'text-status-success font-bold' : 'text-status-warning font-bold'}>
-                  {dev.helmetWorn ? 'SECURED' : 'NOT WORN'}
-                </span>
-              </div>
-              <div className="p-3 rounded-lg bg-canvas-subtle border border-canvas-border flex items-center justify-between">
-                <span className="text-titanium-400">CELLULAR:</span>
-                <span className="text-cyan font-bold">{dev.networkAvailable ? 'SIM800L 4G' : 'OFFLINE'}</span>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setActiveDeviceId(dev.deviceId)}
-              className={`w-full py-2.5 rounded-lg text-xs font-bold font-mono transition-colors ${
-                dev.deviceId === activeDeviceId
-                  ? 'bg-cyan text-canvas'
-                  : 'bg-canvas-elevated text-titanium-100 hover:bg-cyan hover:text-canvas'
+        {deviceList.map((dev) => {
+          const isSelected = dev.deviceId === activeDeviceId;
+          return (
+            <div
+              key={dev.deviceId}
+              className={`helmet-card p-6 space-y-5 transition-all ${
+                isSelected
+                  ? 'border-cyan/50 shadow-card-hover'
+                  : 'hover:border-canvas-border-light'
               }`}
             >
-              {dev.deviceId === activeDeviceId ? 'ACTIVE PRIMARY UNIT' : 'SET AS PRIMARY MONITOR'}
-            </button>
-          </div>
-        ))}
+              <div className="flex items-center justify-between border-b border-canvas-border pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan/10 text-cyan border border-cyan/20">
+                    <HardHat className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-mono font-bold text-base text-white">
+                      {dev.deviceId}
+                    </h3>
+                    <span className="text-xs text-titanium-400">{dev.riderName}</span>
+                  </div>
+                </div>
+
+                <span
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
+                    dev.online
+                      ? 'bg-status-success/10 border-status-success/25 text-status-success'
+                      : 'bg-status-danger/10 border-status-danger/25 text-status-danger'
+                  }`}
+                >
+                  <span className={`h-1.5 w-1.5 rounded-full ${dev.online ? 'bg-status-success' : 'bg-status-danger'}`} />
+                  {dev.online ? 'Connected' : 'Offline'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-canvas-subtle/80 border border-canvas-border flex items-center justify-between">
+                  <span className="text-titanium-400">Battery:</span>
+                  <span className="font-mono text-cyan font-semibold">{dev.batteryLevel}%</span>
+                </div>
+                <div className="p-3 rounded-xl bg-canvas-subtle/80 border border-canvas-border flex items-center justify-between">
+                  <span className="text-titanium-400">GPS Status:</span>
+                  <span className="text-status-success font-medium">{dev.gpsFix ? '3D Locked' : 'Searching'}</span>
+                </div>
+                <div className="p-3 rounded-xl bg-canvas-subtle/80 border border-canvas-border flex items-center justify-between">
+                  <span className="text-titanium-400">4G Link:</span>
+                  <span className={dev.networkAvailable ? 'text-cyan font-medium' : 'text-status-danger'}>
+                    {dev.networkAvailable ? '4G LTE' : 'No Signal'}
+                  </span>
+                </div>
+                <div className="p-3 rounded-xl bg-canvas-subtle/80 border border-canvas-border flex items-center justify-between">
+                  <span className="text-titanium-400">Wearing:</span>
+                  <span className={dev.helmetWorn ? 'text-status-success font-medium' : 'text-status-warning'}>
+                    {dev.helmetWorn ? 'Secured' : 'Standby'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={() => setActiveDeviceId(dev.deviceId)}
+                  className={`w-full py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                    isSelected
+                      ? 'bg-cyan/15 border border-cyan/40 text-cyan'
+                      : 'bg-canvas-card border border-canvas-border text-titanium-300 hover:text-white hover:bg-canvas-elevated'
+                  }`}
+                >
+                  {isSelected ? 'Currently Monitoring' : 'Switch to this Helmet'}
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

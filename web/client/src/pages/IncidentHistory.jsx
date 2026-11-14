@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertOctagon, CheckCircle2, Filter, Phone, ShieldAlert, Sparkles } from 'lucide-react';
+import { AlertOctagon, CheckCircle2, Filter, Phone, ShieldAlert, FileText } from 'lucide-react';
 import { useHelmet } from '../context/HelmetContext';
 
 export default function IncidentHistory() {
@@ -13,29 +13,33 @@ export default function IncidentHistory() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-canvas-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-canvas-border pb-5">
         <div>
-          <span className="font-mono text-xs font-bold text-cyan uppercase tracking-widest">
-            SAFETY LOG & DISPATCH ESCALATION
-          </span>
-          <h1 className="text-2xl font-black text-titanium-100 tracking-tight mt-0.5">
-            Emergency Incidents & SOS History
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-semibold text-cyan tracking-wide">
+              Safety Log & Audit
+            </span>
+            <span className="text-titanium-400 text-xs">•</span>
+            <span className="text-xs text-titanium-400">Emergency Escalations</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-white">
+            Incident Log & SOS History
           </h1>
         </div>
 
         {/* Filter buttons */}
-        <div className="flex items-center gap-2">
-          {['ALL', 'CRITICAL', 'WARNING', 'INFO'].map((sev) => (
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-canvas-card border border-canvas-border">
+          {['ALL', 'CRITICAL', 'WARNING', 'RESOLVED'].map((sev) => (
             <button
               key={sev}
               onClick={() => setFilterSeverity(sev)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-colors ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 filterSeverity === sev
-                  ? 'bg-cyan text-canvas shadow-cyan-sm'
-                  : 'bg-canvas-card border border-canvas-border text-titanium-300 hover:text-white'
+                  ? 'bg-cyan/15 text-cyan border border-cyan/30 font-semibold shadow-sm'
+                  : 'text-titanium-400 hover:text-white'
               }`}
             >
-              {sev}
+              {sev === 'ALL' ? 'All Alerts' : sev.charAt(0) + sev.slice(1).toLowerCase()}
             </button>
           ))}
         </div>
@@ -44,15 +48,15 @@ export default function IncidentHistory() {
       {/* Incident Table */}
       <div className="helmet-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas-subtle border-b border-canvas-border text-titanium-400 uppercase text-[10px]">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-canvas-subtle/80 border-b border-canvas-border text-titanium-400 font-medium">
               <tr>
                 <th className="p-4">Incident ID</th>
                 <th className="p-4">Type</th>
                 <th className="p-4">Severity</th>
                 <th className="p-4">Unit / Rider</th>
                 <th className="p-4">GPS Location</th>
-                <th className="p-4">Timestamp</th>
+                <th className="p-4">Time</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -65,42 +69,51 @@ export default function IncidentHistory() {
                 </tr>
               ) : (
                 filtered.map((alert) => (
-                  <tr key={alert.id} className="hover:bg-canvas-subtle/50 transition-colors">
-                    <td className="p-4 font-bold text-cyan">{alert.id}</td>
-                    <td className="p-4 font-semibold text-titanium-100">
-                      {alert.type || 'CRASH_IMPACT'}
+                  <tr key={alert.id} className="hover:bg-canvas-subtle/40 transition-colors">
+                    <td className="p-4 font-mono font-semibold text-cyan">{alert.id}</td>
+                    <td className="p-4 font-semibold text-white">
+                      {alert.type || 'Crash Impact'}
                     </td>
                     <td className="p-4">
                       <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
                           alert.status === 'CRITICAL'
-                            ? 'bg-status-danger/20 border-status-danger text-status-danger'
+                            ? 'bg-status-danger/15 border-status-danger/30 text-status-danger'
                             : alert.status === 'RESOLVED'
-                            ? 'bg-status-success/20 border-status-success text-status-success'
-                            : 'bg-status-warning/20 border-status-warning text-status-warning'
+                            ? 'bg-status-success/10 border-status-success/25 text-status-success'
+                            : 'bg-status-warning/10 border-status-warning/25 text-status-warning'
                         }`}
                       >
-                        {alert.status}
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            alert.status === 'CRITICAL'
+                              ? 'bg-status-danger animate-pulse'
+                              : alert.status === 'RESOLVED'
+                              ? 'bg-status-success'
+                              : 'bg-status-warning'
+                          }`}
+                        />
+                        {alert.status.charAt(0) + alert.status.slice(1).toLowerCase()}
                       </span>
                     </td>
                     <td className="p-4 text-titanium-200">
-                      {alert.deviceId} ({alert.rider || 'Aarav Nair'})
+                      {alert.deviceId} ({alert.rider || 'Primary Rider'})
                     </td>
-                    <td className="p-4 text-titanium-400">{alert.location || '11.0168, 76.9558'}</td>
+                    <td className="p-4 font-mono text-titanium-400">{alert.location || '11.0168, 76.9558'}</td>
                     <td className="p-4 text-titanium-400">
-                      {alert.timestamp ? new Date(alert.timestamp).toLocaleString() : 'Recent'}
+                      {alert.timestamp ? new Date(alert.timestamp).toLocaleTimeString() : 'Recent'}
                     </td>
                     <td className="p-4 text-right space-x-2">
                       <button
                         onClick={() => setEvidenceData(alert)}
-                        className="px-2.5 py-1 rounded bg-canvas-elevated border border-canvas-border text-cyan hover:border-cyan text-[11px]"
+                        className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.08] text-cyan hover:bg-white/[0.08] text-[11px] font-medium transition-colors"
                       >
                         Evidence
                       </button>
                       {alert.status === 'CRITICAL' && (
                         <button
                           onClick={() => actions.onResolveAlert(alert.id)}
-                          className="px-2.5 py-1 rounded bg-status-success/20 text-status-success text-[11px] font-bold hover:bg-status-success/30"
+                          className="px-2.5 py-1 rounded-lg bg-status-success/15 border border-status-success/30 text-status-success text-[11px] font-semibold hover:bg-status-success/25 transition-colors"
                         >
                           Resolve
                         </button>

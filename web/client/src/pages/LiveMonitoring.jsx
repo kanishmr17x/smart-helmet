@@ -7,9 +7,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { Activity, Flame, Gauge, HardHat, Radio, Shield, Wifi, Zap } from 'lucide-react';
+import { Activity, Flame, Gauge, HardHat, Radio, Zap } from 'lucide-react';
 import { useHelmet } from '../context/HelmetContext';
-import SensorMetricCard from '../components/helmet/SensorMetricCard';
 
 export default function LiveMonitoring() {
   const { telemetry, telemetryHistory, actions } = useHelmet();
@@ -22,61 +21,74 @@ export default function LiveMonitoring() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-canvas-border pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-canvas-border pb-5">
         <div>
-          <span className="font-mono text-xs font-bold text-cyan uppercase tracking-widest">
-            REAL-TIME TELEMETRY BUS
-          </span>
-          <h1 className="text-2xl font-black text-titanium-100 tracking-tight mt-0.5">
-            Live Diagnostics & Hardware Oscilloscope
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-semibold text-cyan tracking-wide">
+              Sensors & Oscilloscope
+            </span>
+            <span className="text-titanium-400 text-xs">•</span>
+            <span className="text-xs text-titanium-400">Continuous 1000ms Polling</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-white">
+            Live Diagnostics & Waveforms
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={actions.onImpact}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-status-danger/20 border border-status-danger text-status-danger text-xs font-bold hover:bg-status-danger/30"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-status-danger/15 border border-status-danger/30 text-status-danger text-xs font-semibold hover:bg-status-danger/25 transition-all active:scale-95 shadow-sm"
           >
             <Flame className="h-4 w-4" />
-            <span>Simulate Impact Test</span>
+            <span>Simulate Impact Surge</span>
           </button>
         </div>
       </div>
 
       {/* Live Waveform Oscilloscope */}
-      <div className="helmet-card p-5">
-        <div className="flex items-center justify-between mb-4 border-b border-canvas-border pb-3">
-          <div className="flex items-center gap-2">
+      <div className="helmet-card p-6">
+        <div className="flex items-center justify-between mb-5 border-b border-canvas-border pb-3">
+          <div className="flex items-center gap-2.5">
             <Activity className="h-4 w-4 text-cyan animate-pulse" />
-            <h3 className="text-sm font-bold text-titanium-100">
-              Live Impact & Tilt Oscilloscope Stream
+            <h3 className="text-sm font-semibold text-white">
+              Real-time G-Force & Tilt Oscilloscope
             </h3>
           </div>
-          <span className="font-mono text-xs text-cyan">
-            WEBSOCKET ACTIVE: 1000ms SAMPLING
-          </span>
+          <div className="flex items-center gap-4 text-xs font-mono text-titanium-400">
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-status-danger" />
+              <span>Impact (G)</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-cyan" />
+              <span>Tilt (°)</span>
+            </div>
+          </div>
         </div>
 
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#2A3745" />
-              <XAxis dataKey="time" stroke="#98A7B7" fontSize={11} />
-              <YAxis stroke="#98A7B7" fontSize={11} domain={[0, 10]} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#232A3B" opacity={0.6} />
+              <XAxis dataKey="time" stroke="#64748B" fontSize={11} tickLine={false} />
+              <YAxis stroke="#64748B" fontSize={11} domain={[0, 10]} tickLine={false} />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#161F29',
-                  borderColor: '#2A3745',
+                  backgroundColor: '#151923',
+                  borderColor: '#232A3B',
+                  borderRadius: '12px',
                   color: '#F1F5F9',
                   fontFamily: 'JetBrains Mono',
                   fontSize: 12,
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)',
                 }}
               />
               <Line
                 type="monotone"
                 dataKey="impactMagnitude"
                 name="Impact (G)"
-                stroke="#FF5C68"
+                stroke="#F43F5E"
                 strokeWidth={2.5}
                 dot={false}
               />
@@ -84,7 +96,7 @@ export default function LiveMonitoring() {
                 type="monotone"
                 dataKey="tiltAngle"
                 name="Tilt Angle (°)"
-                stroke="#35D6E7"
+                stroke="#06B6D4"
                 strokeWidth={2}
                 dot={false}
               />
@@ -94,72 +106,72 @@ export default function LiveMonitoring() {
       </div>
 
       {/* Sensor Grid Details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="helmet-card p-5 space-y-3">
-          <div className="flex items-center gap-2 text-cyan font-bold text-sm">
+          <div className="flex items-center gap-2 text-cyan font-semibold text-sm">
             <Gauge className="h-4 w-4" />
             <span>MPU-6050 Motion Engine</span>
           </div>
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between py-1 border-b border-canvas-border">
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
               <span className="text-titanium-400">Accelerometer:</span>
-              <span className="text-titanium-100">
+              <span className="font-mono text-white">
                 X: {telemetry?.accelerometer?.x?.toFixed(2)} | Y: {telemetry?.accelerometer?.y?.toFixed(2)} | Z: {telemetry?.accelerometer?.z?.toFixed(2)}
               </span>
             </div>
-            <div className="flex justify-between py-1 border-b border-canvas-border">
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
               <span className="text-titanium-400">Gyroscope:</span>
-              <span className="text-titanium-100">
+              <span className="font-mono text-white">
                 X: {telemetry?.gyroscope?.x?.toFixed(1)}°/s | Y: {telemetry?.gyroscope?.y?.toFixed(1)}°/s
               </span>
             </div>
-            <div className="flex justify-between py-1">
+            <div className="flex justify-between py-1.5">
               <span className="text-titanium-400">Sampling Rate:</span>
-              <span className="text-status-success font-bold">100 Hz</span>
+              <span className="text-status-success font-medium">100 Hz Internal</span>
             </div>
           </div>
         </div>
 
         <div className="helmet-card p-5 space-y-3">
-          <div className="flex items-center gap-2 text-status-success font-bold text-sm">
+          <div className="flex items-center gap-2 text-status-success font-semibold text-sm">
             <Radio className="h-4 w-4" />
             <span>NEO-6M GPS Engine</span>
           </div>
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between py-1 border-b border-canvas-border">
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
               <span className="text-titanium-400">Latitude:</span>
-              <span className="text-titanium-100">{telemetry?.latitude?.toFixed(6)}°</span>
+              <span className="font-mono text-white">{telemetry?.latitude?.toFixed(6)}°</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-canvas-border">
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
               <span className="text-titanium-400">Longitude:</span>
-              <span className="text-titanium-100">{telemetry?.longitude?.toFixed(6)}°</span>
+              <span className="font-mono text-white">{telemetry?.longitude?.toFixed(6)}°</span>
             </div>
-            <div className="flex justify-between py-1">
-              <span className="text-titanium-400">Satellites Tracked:</span>
-              <span className="text-status-success font-bold">{telemetry?.satellites || 14} Constellation SATS</span>
+            <div className="flex justify-between py-1.5">
+              <span className="text-titanium-400">Satellites:</span>
+              <span className="text-status-success font-medium">{telemetry?.satellites || 14} Constellation Fix</span>
             </div>
           </div>
         </div>
 
         <div className="helmet-card p-5 space-y-3">
-          <div className="flex items-center gap-2 text-cyan font-bold text-sm">
+          <div className="flex items-center gap-2 text-cyan font-semibold text-sm">
             <Zap className="h-4 w-4" />
-            <span>Power & Peripheral Rails</span>
+            <span>Power & Peripheral Rail</span>
           </div>
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex justify-between py-1 border-b border-canvas-border">
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
               <span className="text-titanium-400">Battery Level:</span>
-              <span className="text-cyan font-bold">{telemetry?.battery}% (4.12V)</span>
+              <span className="font-mono text-cyan font-semibold">{telemetry?.battery}% (4.12V)</span>
             </div>
-            <div className="flex justify-between py-1 border-b border-canvas-border">
-              <span className="text-titanium-400">Worn Switch:</span>
-              <span className={telemetry?.helmetWorn ? 'text-status-success font-bold' : 'text-status-warning font-bold'}>
-                {telemetry?.helmetWorn ? 'CLOSED (WORN)' : 'OPEN (REMOVED)'}
+            <div className="flex justify-between py-1.5 border-b border-canvas-border">
+              <span className="text-titanium-400">Wearing Switch:</span>
+              <span className={`font-medium ${telemetry?.helmetWorn ? 'text-status-success' : 'text-status-warning'}`}>
+                {telemetry?.helmetWorn ? 'Active (Worn)' : 'Open (Removed)'}
               </span>
             </div>
-            <div className="flex justify-between py-1">
-              <span className="text-titanium-400">OLED Status:</span>
-              <span className="text-status-success font-bold">ACTIVE (I2C 0x3C)</span>
+            <div className="flex justify-between py-1.5">
+              <span className="text-titanium-400">Display Bus:</span>
+              <span className="text-status-success font-medium">I2C OLED 0x3C</span>
             </div>
           </div>
         </div>
